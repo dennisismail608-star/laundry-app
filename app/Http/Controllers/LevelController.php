@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Models\Level;
 use Illuminate\Http\Request;
-use RealRashid\SweetAlert\SweetAlertServiceProvider;
+use App\Models\Level;
+use App\Http\Requests;
 
-class UserController extends Controller
+class LevelController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = User::with('level')->orderBy('id', 'DESC')->get();
-        return view('content.user.index', compact('users'));
+        $levels = Level::orderBy('id', 'DESC')->get();
+        return view("content.level.index", compact("levels"));
     }
 
     /**
@@ -32,23 +31,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
-            'name'     => 'required|string|max:100',
-            'email'    => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
-            'id_level' => 'required|exists:levels,id',
+            'level_name'  => 'required|string|max:50',
         ]);
 
-        User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => $request->password,
-            'id_level' => $request->id_level,
+        Level::create($request->only(['level_name']));
 
-        ]);
-
-        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
+        return redirect()->route('level.index')->with('success', 'Level berhasil ditambahkan!');
     }
 
     /**
@@ -56,7 +45,8 @@ class UserController extends Controller
      */
     public function show(string $id)
     {
-        //
+
+
     }
 
     /**
@@ -64,7 +54,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $edit = Level::find($id);
+        return view('content.level.edit', compact('edit'));
     }
 
     /**
@@ -72,7 +63,10 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $levels = Level::find($id);
+        $levels->level_name = $request->level_name;
+        $levels->save();
+        return redirect()->to('level');
     }
 
     /**
@@ -80,6 +74,7 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Level::find($id)->delete();
+        return redirect()->to('level')->with('success');
     }
 }

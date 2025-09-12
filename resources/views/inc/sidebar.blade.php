@@ -82,6 +82,7 @@
                  <ul class="nav flex-column sub-menu">
                      <li class="nav-item"> <a class="nav-link" href="pages/samples/login.html"> Login </a></li>
                      <li class="nav-item"> <a class="nav-link" href="{{ route('user.index') }}"> Register </a></li>
+                     <li class="nav-item"> <a class="nav-link" href="{{ route('level.index') }}"> Role </a></li>
                  </ul>
              </div>
          </li>

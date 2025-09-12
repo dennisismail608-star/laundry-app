@@ -5,19 +5,17 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Data User</h4>
-                        <p class="card-description">data user</p>
+                        <h4 class="card-title">Level user</h4>
+                        <p class="card-description">level user</p>
                         <div align="right">
-                            <a href="{{ route('user.create') }}" class="btn btn-primary mt-2 mb-2">Create</a>
+                            <a href="{{ route('level.create') }}" class="btn btn-primary mt-2 mb-2">Create</a>
                         </div>
                         <div class="table-responsive pt-3">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Level</th>
+                                        <th>Role</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -25,29 +23,24 @@
                                     $no = 1;
                                 @endphp
                                 <tbody>
-                                    @foreach ($users as $item)
+                                    @foreach ($level as $item)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->email }}</td>
+                                            <td>{{ $item->level_name }}</td>
                                             <td>
-                                                @foreach ($item->level as $level)
-                                                    <span
-                                                        class="btn btn-primary btn-rounded btn-fw">{{ $level->level_name }}</span>
-                                                @endforeach
-                                            </td>
-                                            <td>
-                                                <a href="" class="btn btn-warning btn-rounded btn-fw">Tambah
-                                                    role</a>
-                                                <a href="" class="btn btn-info btn-rounded btn-fw">Edit</a>
-                                                <form action="" method="post" class="d-inline"
-                                                    onclick="return confirm('Yakin ingin delete ?')">
+                                                <a href="{{ route('level.edit', ['level' => $item->id]) }}"
+                                                    class="btn btn-info btn-rounded btn-fw">Edit</a>
+
+                                                <form action="{{ route('level.destroy', ['level' => $item->id]) }}"
+                                                    method="POST" class="d-inline"
+                                                    onsubmit="return confirm('Yakin ingin delete ?')">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="btn btn-danger btn-rounded btn-fw"
                                                         type="submit">Delete</button>
                                                 </form>
                                             </td>
+
                                         </tr>
                                     @endforeach
                                 </tbody>
