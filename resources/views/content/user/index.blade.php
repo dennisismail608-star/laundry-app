@@ -25,16 +25,16 @@
                                     $no = 1;
                                 @endphp
                                 <tbody>
-                                    @foreach ($users as $item)
+                                    @foreach ($users as $key => $item)
                                         <tr>
-                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $key++ }}</td>
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->email }}</td>
                                             <td>
-                                                @foreach ($item->level as $level)
-                                                    <span
-                                                        class="btn btn-primary btn-rounded btn-fw">{{ $level->level_name }}</span>
-                                                @endforeach
+
+                                                <span
+                                                    class="btn btn-primary btn-rounded btn-fw">{{ $item->levels->level_name }}</span>
+
                                             </td>
                                             <td>
                                                 <a href="" class="btn btn-warning btn-rounded btn-fw">Tambah

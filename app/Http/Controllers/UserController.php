@@ -14,7 +14,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::with('level')->orderBy('id', 'DESC')->get();
+        $users = User::with('levels')->orderBy('id', 'DESC')->get();
         return view('content.user.index', compact('users'));
     }
 
@@ -37,7 +37,7 @@ class UserController extends Controller
             'name'     => 'required|string|max:100',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'id_level' => 'required|exists:levels,id',
+            'id_level' => 'required|exists:levels,level_name',
         ]);
 
         User::create([

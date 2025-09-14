@@ -22,7 +22,7 @@
                                 <input type="password" class="form-control" name="password" placeholder="Isi Password">
                             </div>
                             <div class="form-group">
-                                <label for="" class="form-control">Pilih role</label>
+                                <label for="">Pilih role</label>
                                 <select name="id_level" class="form-control">
                                     @foreach ($levels as $i)
                                         <option value="{{ $i->id }}">{{ $i->level_name }}</option>

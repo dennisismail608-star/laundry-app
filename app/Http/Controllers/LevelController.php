@@ -23,7 +23,7 @@ class LevelController extends Controller
     public function create()
     {
         $levels = Level::all(); // ambil semua level
-        return view('content.user.create', compact('levels'));
+        return view('content.level.create', compact('levels'));
     }
 
     /**
@@ -43,11 +43,7 @@ class LevelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
-    {
-
-
-    }
+    public function show(string $id) {}
 
     /**
      * Show the form for editing the specified resource.

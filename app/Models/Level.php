@@ -10,4 +10,8 @@ class Level extends Model
         'level_name',
     ];
 
+    public function users()
+    {
+        return $this->hasMany(User::class, 'level_name');
+    }
 }

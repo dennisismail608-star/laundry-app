@@ -23,7 +23,7 @@
                                     $no = 1;
                                 @endphp
                                 <tbody>
-                                    @foreach ($level as $item)
+                                    @foreach ($levels as $item)
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $item->level_name }}</td>
