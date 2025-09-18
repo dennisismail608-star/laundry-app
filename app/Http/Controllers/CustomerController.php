@@ -32,7 +32,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $customer = Customer::create($request->all());
-        return redirect()->route("customer.index")->with("success", "Tambah berhasil!!");
+        return redirect()->route("customer.index", compact('customer'))->with("success", "Tambah berhasil!!");
     }
 
     /**

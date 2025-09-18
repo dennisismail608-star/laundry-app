@@ -7,6 +7,12 @@
              </a>
          </li>
          <li class="nav-item">
+             <a class="nav-link" href="{{ route('service.index') }}">
+                 <i class="icon-grid menu-icon"></i>
+                 <span class="menu-title">Service</span>
+             </a>
+         </li>
+         <li class="nav-item">
              <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
                  <i class="icon-layout menu-icon"></i>
                  <span class="menu-title">UI Elements</span>
@@ -14,7 +20,7 @@
              </a>
              <div class="collapse" id="ui-basic">
                  <ul class="nav flex-column sub-menu">
-                     <li class="nav-item"> <a class="nav-link" href="{{route('customer.index')}}">Customer</a></li>
+                     <li class="nav-item"> <a class="nav-link" href="{{ route('customer.index') }}">Customer</a></li>
                      <li class="nav-item"> <a class="nav-link" href="pages/ui-features/dropdowns.html">Dropdowns</a>
                      </li>
                      <li class="nav-item"> <a class="nav-link" href="pages/ui-features/typography.html">Typography</a>
