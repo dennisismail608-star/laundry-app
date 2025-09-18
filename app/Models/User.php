@@ -13,8 +13,8 @@ class User extends Model
         "id_level",
     ];
 
-    public function levels()
+    public function level()
     {
-        return $this->belongsTo(User::class, 'id_level');
+        return $this->belongsTo(User::class, 'id_level', 'id');
     }
 }

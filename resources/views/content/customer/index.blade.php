@@ -5,10 +5,10 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Data User</h4>
-                        <p class="card-description">data user</p>
+                        <h4 class="card-title">Data Customer</h4>
+                        <p class="card-description">data customer</p>
                         <div align="right">
-                            <a href="{{ route('user.create') }}" class="btn btn-primary mt-2 mb-2">Create</a>
+                            <a href="{{ route('customer.create') }}" class="btn btn-primary mt-2 mb-2">Create</a>
                         </div>
                         <div class="table-responsive pt-3">
                             <table class="table table-bordered">
@@ -16,8 +16,8 @@
                                     <tr>
                                         <th>No</th>
                                         <th>Name</th>
-                                        <th>Email</th>
-                                        <th>Role</th>
+                                        <th>Address</th>
+                                        <th>Phone</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -25,20 +25,16 @@
                                     $no = 1;
                                 @endphp
                                 <tbody>
-                                    @foreach ($users as $key => $item)
+                                    @foreach ($customers as $key => $item)
                                         <tr>
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->email }}</td>
+                                            <td>{{ $item->customer_name }}</td>
+                                            <td>{{ $item->address }}</td>
+                                            <td>{{ $item->phone }}</td>
                                             <td>
-
-                                                <span class="btn btn-primary btn-rounded btn-fw"></span>
-
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('user.edit', $item->id) }}"
+                                                <a href="{{ route('customer.edit', $item->id) }}"
                                                     class="btn btn-info btn-rounded btn-fw">Edit</a>
-                                                <form action="{{ route('user.destroy', $item->id) }}" method="post"
+                                                <form action="{{ route('customer.destroy', $item->id) }}" method="post"
                                                     class="d-inline" onclick="return confirm('Yakin ingin delete ?')">
                                                     @csrf
                                                     @method('DELETE')
