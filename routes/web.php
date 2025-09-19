@@ -9,6 +9,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PickupController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,3 +25,7 @@ route::resource('level', LevelController::class);
 route::resource('customer', CustomerController::class);
 Route::resource('service', ServiceController::class);
 Route::resource('order', OrderController::class);
+Route::patch('/order/{id}/status', [OrderController::class, 'updateStatus'])->name('order.updateStatus');
+
+Route::get('order/{order}/pickup', [PickupController::class, 'create'])->name('pickup.create');
+Route::post('order/{order}/pickup', [PickupController::class, 'store'])->name('pickup.store');

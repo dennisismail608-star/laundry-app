@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('trans_order_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('trans_orders')->onDelete('cascade');
-            $table->foreignId('service_id')->constrained('type_of_services')->onDelete('cascade');
+            $table->foreignId('id_order')->constrained('trans_orders')->onDelete('cascade');
+            $table->foreignId('id_service')->constrained('type_of_services')->onDelete('cascade');
             $table->integer('qty');
             $table->integer('subtotal');
             $table->text('notes')->nullable();

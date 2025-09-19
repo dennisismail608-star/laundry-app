@@ -19,6 +19,21 @@ class TransOrder extends Model
 
     public function details()
     {
-        return $this->hasMany(TransOrderDetail::class, 'order_id');
+        return $this->hasMany(TransOrderDetail::class, 'id_order');
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class, 'id_customer', 'id');
+    }
+
+    public function getStatusTextAttribute()
+    {
+        return $this->order_status == 1 ? 'Selesai' : 'Belum Selesai';
+    }
+
+    public function pickup()
+    {
+        return $this->hasOne(TransLaundryPickup::class, 'id_order');
     }
 }

@@ -40,8 +40,10 @@ class OrderController extends Controller
 
     public function index()
     {
+        $orders = TransOrder::with('customer')->get();
+        $customer = Customer::all();
         $order = TransOrder::orderBy("id", "desc")->paginate(10);
-        return view("content.order.index", compact("order"));
+        return view("content.order.index", compact("order", "customer"));
     }
 
     /**
@@ -90,8 +92,8 @@ class OrderController extends Controller
         // simpan ke trans_order_details
         foreach ($request->services as $service) {
             TransOrderDetail::create([
-                'order_id'   => $order->id,
-                'service_id' => $service['service_id'],  // ✅ sesuai field di migration
+                'id_order'   => $order->id,
+                'id_service' => $service['id_service'],  // ✅ sesuai field di migration
                 'qty'        => $service['qty'],
                 'subtotal'   => $service['subtotal'],
                 'notes'      => $service['notes'] ?? null,
@@ -131,6 +133,23 @@ class OrderController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $order = TransOrder::findOrFail($id);
+
+        // kalau mau sekalian hapus detailnya juga:
+        $order->details()->delete();
+
+        // baru hapus order
+        $order->delete();
+
+        return redirect()->route('order.index')->with('success', '');
+    }
+
+    public function updateStatus($id)
+    {
+        $order = TransOrder::findOrFail($id);
+        $order->order_status = 1;
+        $order->save();
+
+        return redirect()->route('order.index')->with('success', 'Order berhasil ditandai selesai!');
     }
 }

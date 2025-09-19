@@ -61,7 +61,7 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <select name="services[0][service_id]" class="form-control service">
+                                            <select name="services[0][id_service]" class="form-control service">
                                                 @foreach ($services as $s)
                                                     <option value="{{ $s->id }}" data-price="{{ $s->price }}">
                                                         {{ $s->service_name }}
@@ -97,7 +97,7 @@
                             </div>
 
                             <button type="submit" class="btn btn-primary mt-3">Simpan</button>
-                            <a href="{{ url()->previous() }}" class="btn btn-light">Cancel</a>
+                            <a href="{{ url()->previous() }}" class="btn btn-light mt-3">Cancel</a>
                         </form>
 
                         <script>

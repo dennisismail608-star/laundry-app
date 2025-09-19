@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TransOrderDetail extends Model
+class TransLaundryPickup extends Model
 {
     protected $fillable = [
         "id_order",
-        "id_service",
-        "qty",
-        "subtotal",
+        "id_customer",
+        "pickup_date",
         "notes",
     ];
 
@@ -19,8 +18,9 @@ class TransOrderDetail extends Model
         return $this->belongsTo(TransOrder::class, 'id_order');
     }
 
-    public function service()
+    // Relasi ke customer
+    public function customer()
     {
-        return $this->belongsTo(TypeOfService::class, 'id_service');
+        return $this->belongsTo(Customer::class, 'id_customer');
     }
 }

@@ -11,4 +11,9 @@ class Customer extends Model
         "phone",
         "address",
     ];
+
+    public function pickups()
+    {
+        return $this->hasMany(TransLaundryPickup::class, 'id_customer');
+    }
 }
