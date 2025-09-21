@@ -17,12 +17,17 @@ class PickupController extends Controller
 
     public function store(Request $request, $orderId)
     {
+        $order = TransOrder::findOrFail($orderId);
 
         TransLaundryPickup::create([
-            'order_id'    => $orderId,
+            'id_order'    => $orderId,
+            'id_customer' => $request->id_customer,
             'pickup_date' => $request->pickup_date,
             'notes'       => $request->notes,
         ]);
+
+        $order->order_status = 2;
+        $order->save();
 
         return redirect()->route('order.index')->with('success', 'Pickup berhasil dijadwalkan');
     }

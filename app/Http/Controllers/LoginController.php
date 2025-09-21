@@ -17,26 +17,21 @@ class LoginController extends Controller
     public function login(Request $request)
     {
 
-        $request->validate([
-            'email'    => 'required|email',
-            'password' => 'required|string|min:6',
+        // validasi input
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
         ]);
 
-        // Cari user berdasarkan email
-        $user = User::where('email', $request->email)->first();
-
-        if (!$user) {
-            return back()->withErrors(['email' => 'Email tidak terdaftar.']);
+        // coba login
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate(); // cegah session hijacking
+            return redirect()->intended('content/dashboard'); // redirect ke dashboard
         }
 
-        // Cek password tanpa bcrypt
-        if ($user->password !== $request->password) {
-            return back()->withErrors(['password' => 'Password salah.']);
-        }
-
-        // Login user
-        Auth::login($user);
-
-        return redirect()->route('content.dashboard')->with('success', 'Login berhasil!');
+        // kalau gagal
+        return back()->withErrors([
+            'email' => 'Email atau password salah.',
+        ])->onlyInput('email');
     }
 }

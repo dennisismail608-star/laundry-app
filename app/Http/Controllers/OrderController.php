@@ -66,7 +66,6 @@ class OrderController extends Controller
             'id_customer'    => 'required|exists:customers,id',
             'order_code'     => 'required|unique:trans_orders,order_code',
             'order_date'     => 'required|date',
-            'order_end_date' => 'required|date',
             'services'       => 'required|array|min:1',
         ]);
 
@@ -82,7 +81,6 @@ class OrderController extends Controller
             'id_customer'   => $request->id_customer,
             'order_code'    => $request->order_code,
             'order_date'    => $request->order_date,
-            'order_end_date' => $request->order_end_date,
             'order_status'  => 0, // pending
             'order_pay'     => $request->order_pay,
             'order_change'  => $order_change,
@@ -144,12 +142,19 @@ class OrderController extends Controller
         return redirect()->route('order.index')->with('success', '');
     }
 
-    public function updateStatus($id)
+    public function updateStatus(Request $request, $id)
     {
         $order = TransOrder::findOrFail($id);
-        $order->order_status = 1;
+        $status = $request->status;
+
+        if ($status == 1 && is_null($order->order_end_date)) {
+            // set end_date otomatis kalau status selesai
+            $order->order_end_date = now();
+        }
+
+        $order->order_status = $status;
         $order->save();
 
-        return redirect()->route('order.index')->with('success', 'Order berhasil ditandai selesai!');
+        return back()->with('success', 'Status order berhasil diperbarui');
     }
 }

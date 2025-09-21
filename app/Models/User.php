@@ -2,19 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
-class User extends Model
+class User extends Authenticatable
 {
+    use Notifiable;
+
     protected $fillable = [
-        "name",
-        "email",
-        "password",
-        "id_level",
+        'name',
+        'email',
+        'password',
+    ];
+
+    protected $hidden = [
+        'password',
     ];
 
     public function level()
     {
-        return $this->belongsTo(User::class, 'id_level', 'id');
+        return $this->belongsTo(Level::class, 'id_level', 'id');
     }
 }

@@ -24,6 +24,7 @@
                             <div class="form-group">
                                 <label for="">Pilih role</label>
                                 <select name="id_level" class="form-control">
+                                    <option value="">--pilih role--</option>
                                     @foreach ($levels as $i)
                                         <option value="{{ $i->id }}">{{ $i->level_name }}</option>
                                     @endforeach

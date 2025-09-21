@@ -5,38 +5,37 @@
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body col-lg-12">
-                        <h3 class="card-title">Tambah Transaksi Order</h3>
+                        <h1 class="card-title text-center">Tambah Transaksi Order</h1>
 
                         <form action="{{ route('order.store') }}" method="POST">
                             @csrf
 
                             <!-- Order Code -->
                             <div class="mb-3">
-                                <label>Order Code</label>
-                                <input type="text" name="order_code" class="form-control" value="{{ $order_code ?? '' }}"
-                                    readonly>
+                                <label>
+                                    <h4 class="mt-4">Order Code : {{ $order_code ?? '' }}</h4>
+                                    <input type="hidden" name="order_code" class="form-control"
+                                        value="{{ $order_code }}">
+                                </label>
                             </div>
 
                             <!-- Customer -->
-                            <div class="mb-3">
-                                <label>Customer</label>
-                                <select name="id_customer" class="form-control" required>
-                                    <option value="">-- pilih customer --</option>
-                                    @foreach ($customers as $c)
-                                        <option value="{{ $c->id }}">{{ $c->customer_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+
 
                             <!-- Tanggal -->
                             <div class="row">
                                 <div class="col-md-6 mb-3">
-                                    <label>Tanggal Order</label>
-                                    <input type="date" name="order_date" class="form-control" required>
+                                    <label>Customer</label>
+                                    <select name="id_customer" class="form-control" required>
+                                        <option value="">-- pilih customer --</option>
+                                        @foreach ($customers as $c)
+                                            <option value="{{ $c->id }}">{{ $c->customer_name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                                 <div class="col-md-6 mb-3">
-                                    <label>Tanggal Selesai</label>
-                                    <input type="date" name="order_end_date" class="form-control" required>
+                                    <label>Tanggal Order</label>
+                                    <input type="date" name="order_date" class="form-control" required>
                                 </div>
                             </div>
 

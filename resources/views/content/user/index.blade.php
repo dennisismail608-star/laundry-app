@@ -11,7 +11,7 @@
                             <a href="{{ route('user.create') }}" class="btn btn-primary mt-2 mb-2">Create</a>
                         </div>
                         <div class="table-responsive pt-3">
-                            <table class="table table-bordered">
+                            <table class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -21,18 +21,18 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                @php
-                                    $no = 1;
-                                @endphp
                                 <tbody>
                                     @foreach ($users as $key => $item)
                                         <tr>
-                                            <td>{{ $no++ }}</td>
+                                            <td>{{ $key += 1 }}</td>
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->email }}</td>
                                             <td>
-
-                                                <span class="btn btn-primary btn-rounded btn-fw"></span>
+                                                @if ($item->level)
+                                                    <span class="btn btn-primary btn-rounded btn-fw">
+                                                        {{ $item->level->level_name }}
+                                                    </span>
+                                                @endif
 
                                             </td>
                                             <td>
