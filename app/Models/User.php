@@ -13,6 +13,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'id_level',
     ];
 
     protected $hidden = [
@@ -22,5 +23,9 @@ class User extends Authenticatable
     public function level()
     {
         return $this->belongsTo(Level::class, 'id_level', 'id');
+    }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 }

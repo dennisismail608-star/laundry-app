@@ -8,10 +8,10 @@
                         <h4 class="card-title">Data User</h4>
                         <p class="card-description">data user</p>
                         <div align="right">
-                            <a href="{{ route('user.create') }}" class="btn btn-primary mt-2 mb-2">Create</a>
+                            <a href="{{ route('users.create') }}" class="btn btn-primary mt-2 mb-2">Create</a>
                         </div>
                         <div class="table-responsive pt-3">
-                            <table class="table table-hover">
+                            <table id="example" class="display expandable-table" style="width:100%">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -36,9 +36,9 @@
 
                                             </td>
                                             <td>
-                                                <a href="{{ route('user.edit', $item->id) }}"
+                                                <a href="{{ route('users.edit', $item->id) }}"
                                                     class="btn btn-info btn-rounded btn-fw">Edit</a>
-                                                <form action="{{ route('user.destroy', $item->id) }}" method="post"
+                                                <form action="{{ route('users.destroy', $item->id) }}" method="post"
                                                     class="d-inline" onclick="return confirm('Yakin ingin delete ?')">
                                                     @csrf
                                                     @method('DELETE')

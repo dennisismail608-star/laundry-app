@@ -5,10 +5,11 @@
             <div class="col-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Tambah User</h4>
-                        <p class="card-description">Isi Form untuk tambah user</p>
-                        <form action="{{ route('user.store') }}" class="forms-sample" method="POST">
+                        <h4 class="card-title">Edit User</h4>
+                        <p class="card-description">Isi Form untuk Edit user</p>
+                        <form action="{{ route('users.update', $users->id) }}" class="forms-sample" method="POST">
                             @csrf
+                            @method('PUT')
                             <div class="form-group">
                                 <label for="">Name</label>
                                 <input type="text" class="form-control" name="name" placeholder="Isi Nama Anda">
@@ -24,7 +25,6 @@
                             <div class="form-group">
                                 <label for="">Pilih role</label>
                                 <select name="id_level" class="form-control">
-                                    <option value="">--pilih role--</option>
                                     @foreach ($levels as $i)
                                         <option value="{{ $i->id }}">{{ $i->level_name }}</option>
                                     @endforeach

@@ -15,16 +15,18 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('level')->orderBy('id', 'DESC')->get();
-        return view('content.user.index', compact('users'));
+        return view('content.users.index', compact('users'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        $levels = Level::all(); // ambil semua level
-        return view('content.user.create', compact('levels'));
+        $users = User::with('level')->orderBy('id', 'DESC')->get();
+        $levels = Level::orderBy('id', 'DESC')->get();
+
+        return view('content.users.create', compact('users', 'levels'));
     }
 
     /**
@@ -48,7 +50,7 @@ class UserController extends Controller
 
         ]);
 
-        return redirect()->route('user.index')->with('success', 'User berhasil ditambahkan!');
+        return redirect()->route('users.index')->with('success', 'User berhasil ditambahkan!');
     }
 
     /**
@@ -67,7 +69,7 @@ class UserController extends Controller
         $users = User::findOrFail($id);
         $levels = Level::all();
 
-        return view('content.user.edit', compact('users', 'levels'));
+        return view('content.users.edit', compact('users', 'levels'));
     }
 
     /**
@@ -81,7 +83,7 @@ class UserController extends Controller
         $users->password = $request->password;
         $users->id_level = $request->id_level;
         $users->save();
-        return redirect()->to('user')->with('success', 'edit berhasil');
+        return redirect()->to('users')->with('success', 'edit berhasil');
     }
 
     /**
@@ -90,6 +92,6 @@ class UserController extends Controller
     public function destroy(string $id)
     {
         User::find($id)->delete();
-        return redirect()->to('user')->with('success', 'hapus berhasill!!');
+        return redirect()->to('users')->with('success', 'hapus berhasill!!');
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('id_level')->constrained('levels')->onDelete('cascade');
             $table->string('name', 50);
             $table->string('email', 50)->unique();
-            $table->string('password', 50);
+            $table->string('password', 100);
             $table->timestamps();
         });
     }
