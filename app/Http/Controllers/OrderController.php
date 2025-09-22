@@ -54,7 +54,7 @@ class OrderController extends Controller
         $order_code = $this->createOrderCode();
         $customers = Customer::all();
         $services  = TypeOfService::all();
-        return view('content.order.create', compact('customers', 'services', 'order_code'));
+        return view('content.order.laundry', compact('customers', 'services', 'order_code'));
     }
 
     /**
@@ -62,13 +62,15 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+        // Validasi
         $request->validate([
-            'id_customer'    => 'required|exists:customers,id',
-            'order_code'     => 'required|unique:trans_orders,order_code',
-            'order_date'     => 'required|date',
-            'services'       => 'required|array|min:1',
+            'id_customer' => 'required|exists:customers,id',
+            'order_code'  => 'required|unique:trans_orders,order_code',
+            'order_date'  => 'required|date',
+            'services'    => 'required|array|min:1',
         ]);
 
+        // Hitung total
         $total = 0;
         foreach ($request->services as $service) {
             $subtotal = ($service['price'] ?? 0) * ($service['qty'] ?? 0);
@@ -77,29 +79,42 @@ class OrderController extends Controller
 
         $order_change = $request->order_pay ? $request->order_pay - $total : 0;
 
-        $order = TransOrder::create([
-            'id_customer'   => $request->id_customer,
-            'order_code'    => $request->order_code,
-            'order_date'    => $request->order_date,
-            'order_status'  => 0, // pending
-            'order_pay'     => $request->order_pay,
-            'order_change'  => $order_change,
-            'total'         => $total,
-        ]);
-
-        // simpan ke trans_order_details
-        foreach ($request->services as $service) {
-            TransOrderDetail::create([
-                'id_order'   => $order->id,
-                'id_service' => $service['id_service'],  // ✅ sesuai field di migration
-                'qty'        => $service['qty'],
-                'subtotal'   => $service['subtotal'],
-                'notes'      => $service['notes'] ?? null,
+        try {
+            // Simpan order
+            $order = TransOrder::create([
+                'id_customer'  => $request->id_customer,
+                'order_code'   => $request->order_code,
+                'order_date'   => $request->order_date,
+                'order_status' => 0,
+                'order_pay'    => $request->order_pay,
+                'order_change' => $order_change,
+                'total'        => $total,
             ]);
-        }
 
-        return redirect()->route('order.index')->with('success', 'Order berhasil dibuat');
+            // Simpan order details
+            foreach ($request->services as $service) {
+                TransOrderDetail::create([
+                    'id_order'   => $order->id,
+                    'id_service' => $service['id_service'],
+                    'qty'        => $service['qty'],
+                    'subtotal'   => $service['subtotal'],
+                    'notes'      => $service['notes'] ?? null,
+                ]);
+            }
+
+            // RETURN JSON agar fetch JS bisa baca
+            return response()->json([
+                'message' => 'Order berhasil dibuat',
+                'order'   => $order,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Terjadi kesalahan server',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
     }
+
 
 
     /**
