@@ -19,7 +19,7 @@ class TransOrder extends Model
 
     public function details()
     {
-        return $this->hasMany(TransOrderDetail::class, 'id_order');
+        return $this->hasMany(TransOrderDetail::class, 'id_order', 'id');
     }
 
     public function customer()

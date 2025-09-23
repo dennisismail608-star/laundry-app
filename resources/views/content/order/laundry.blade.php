@@ -530,22 +530,22 @@
             <div class="card">
                 <h2>📊 Riwayat Transaksi</h2>
                 <div class="transaction-list" id="transactionHistory">
+                    {{-- <div class="transaction-item">
+                        <h4></h4>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <p></p>
+                        <span class="status-badge status-process"></span>
+                    </div>
                     <div class="transaction-item">
                         <h4></h4>
                         <p></p>
                         <p></p>
                         <p></p>
                         <p></p>
-                        <span class="status-badge status-process">Proses</span>
-                    </div>
-                    <div class="transaction-item">
-                        <h4>TRX-002 - Jane Smith</h4>
-                        <p>📞 0813-7654-3210</p>
-                        <p>🛍️ Cuci Kering - 3kg</p>
-                        <p>💰 Rp 15.000</p>
-                        <p>📅 13 Juli 2025, 13:15</p>
-                        <span class="status-badge status-ready">Siap</span>
-                    </div>
+                        <span class="status-badge status-ready"></span>
+                    </div> --}}
                 </div>
 
                 <button class="btn btn-warning" onclick="showAllTransactions()" style="width: 100%; margin-top: 15px;">
@@ -589,10 +589,23 @@
             document.getElementById('customerAddress').value = selectedOption.getAttribute('data-address') || '';
         });
 
-        function addService(serviceName, price) {
-            document.getElementById('serviceType').value = serviceName;
+        function addService(serviceName, price, serviceId) {
+            const serviceSelect = document.getElementById('serviceType');
+
+            // Cari option berdasarkan value (id)
+            for (let i = 0; i < serviceSelect.options.length; i++) {
+                if (serviceSelect.options[i].value == serviceId) {
+                    serviceSelect.selectedIndex = i;
+                    // update data-name dan data-price untuk addToCart
+                    updatePrice();
+                    break;
+                }
+            }
+
             document.getElementById('serviceWeight').focus();
         }
+
+
         // Ambil harga dari <option> (data-price)
         function updatePrice() {
             const select = document.getElementById('serviceType');
@@ -691,8 +704,10 @@
             const customerSelect = document.getElementById('customerName');
             const customerId = customerSelect.value;
             const customerName = customerSelect.options[customerSelect.selectedIndex].text; // nama string
-            const customerPhone = customerSelect.options[customerSelect.selectedIndex].getAttribute('data-phone') || '';
-            const customerAddress = customerSelect.options[customerSelect.selectedIndex].getAttribute('data-address') ||
+            const customerPhone = customerSelect.options[customerSelect.selectedIndex].getAttribute('data-phone') ||
+                '';
+            const customerAddress = customerSelect.options[customerSelect.selectedIndex].getAttribute(
+                    'data-address') ||
                 '';
 
             if (!customerId || cart.length === 0) {
@@ -704,13 +719,20 @@
 
             const transaction = {
                 id_customer: customerId, // dari select
-                order_code: `TRX-${transactionCounter.toString().padStart(3, '0')}`, // wajib
+                order_code: `TRX-${transactionCounter.toString().padStart(3, '0')}`,
+                // order_code: result.order.order_code,
                 order_date: new Date().toISOString().split('T')[0], // "YYYY-MM-DD"
-                customers: {
+                customer: {
                     name: customerName,
                     phone: customerPhone,
                     address: customerAddress,
                 },
+                services: cart.map(item => ({
+                    id_service: item.id_service, // pastikan item punya ini
+                    qty: item.weight,
+                    price: item.price,
+                    subtotal: item.subtotal
+                })),
                 items: [...cart],
                 total: total,
                 date: new Date().toISOString(),
@@ -765,7 +787,7 @@
                 <div class="receipt">
                     <div class="receipt-header">
                         <h2>🧺 LAUNDRY RECEIPT</h2>
-                        <p>ID: ${transaction.id}</p>
+                        <p>ID: ${transaction.customer.name}</p>
                         <p>Tanggal: ${new Date(transaction.date).toLocaleString('id-ID')}</p>
                     </div>
 
@@ -779,8 +801,8 @@
                     <div style="margin-bottom: 20px;">
                         <strong>Detail Pesanan:</strong><br>
                         ${transaction.items.map(item =>`<div class="receipt-item">
-                                            <span>${item.service} (${item.weight} ${item.service.includes('Sepatu') ? 'pasang' : item.service.includes('Karpet') ? 'm²' : 'kg'})</span>
-                                            <span>Rp ${item.subtotal.toLocaleString()}</span></div>`).join('')}
+                                                                        <span>${item.service} (${item.weight} ${item.service.includes('Sepatu') ? 'pasang' : item.service.includes('Karpet') ? 'm²' : 'kg'})</span>
+                                                                        <span>Rp ${item.subtotal.toLocaleString()}</span></div>`).join('')}
                     </div>
 
                     <div class="receipt-total">
@@ -852,16 +874,13 @@
             document.getElementById('receiptTotal').textContent = totalAmount.toLocaleString();
         }
 
-        // Print struk (hanya struk aja yg ke-print)
-
-
         function updateTransactionHistory() {
             const historyContainer = document.getElementById('transactionHistory');
             const recentTransactions = transactions.slice(-5).reverse();
 
             const html = recentTransactions.map(transaction => `
                 <div class="transaction-item">
-                    <h4>${transaction.id} - ${transaction.customer.name}</h4>
+                    <h4>${transaction.order_code} - ${transaction.customer.name}</h4>
                     <p>📞 ${transaction.customer.phone}</p>
                     <p>🛍️ ${transaction.items.map(item => `${item.service} - ${item.weight}${item.service.includes('Sepatu') ? 'pasang' : item.service.includes('Karpet') ? 'm²' : 'kg'}`).join(', ')}</p>
                     <p>💰 Rp ${transaction.total.toLocaleString()}</p>
@@ -900,18 +919,18 @@
                 <h2>📋 Semua Transaksi</h2>
                 <div style="max-height: 400px; overflow-y: auto;">
                     ${transactions.map(transaction => `
-                                                                                                                                                                                                    <div class="transaction-item">
-                                                                                                                                                                                                        <h4>${transaction.id} - ${transaction.customer.name}</h4>
-                                                                                                                                                                                                        <p>📞 ${transaction.customer.phone}</p>
-                                                                                                                                                                                                        <p>🛍️ ${transaction.items.map(item => `${item.service} - ${item.weight}${item.service.includes('Sepatu') ? 'pasang' : item.service.includes('Karpet') ? 'm²' : 'kg'}`).join(', ')}</p>
-                                                                                                                                                                                                        <p>💰 Rp ${transaction.total.toLocaleString()}</p>
-                                                                                                                                                                                                        <p>📅 ${new Date(transaction.date).toLocaleString('id-ID')}</p>
-                                                                                                                                                                                                        <span class="status-badge status-${transaction.status}">${getStatusText(transaction.status)}</span>
-                                                                                                                                                                                                        <button class="btn btn-primary" onclick="updateTransactionStatus('${transaction.id}')" style="margin-top: 10px; padding: 5px 15px; font-size: 12px;">
-                                                                                                                                                                                                            📝 Update Status
-                                                                                                                                                                                                        </button>
-                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                `).join('')}
+                                                                                                                                                                                                                                                                                            <div class="transaction-item">
+                                                                                                                                                                                                                                                                                                <h4>${transaction.id} - ${transaction.customer.name}</h4>
+                                                                                                                                                                                                                                                                                                <p>📞 ${transaction.customer.phone}</p>
+                                                                                                                                                                                                                                                                                                <p>🛍️ ${transaction.items.map(item => `${item.service} - ${item.weight}${item.service.includes('Sepatu') ? 'pasang' : item.service.includes('Karpet') ? 'm²' : 'kg'}`).join(', ')}</p>
+                                                                                                                                                                                                                                                                                                <p>💰 Rp ${transaction.total.toLocaleString()}</p>
+                                                                                                                                                                                                                                                                                                <p>📅 ${new Date(transaction.date).toLocaleString('id-ID')}</p>
+                                                                                                                                                                                                                                                                                                <span class="status-badge status-${transaction.status}">${getStatusText(transaction.status)}</span>
+                                                                                                                                                                                                                                                                                                <button class="btn btn-primary" onclick="updateTransactionStatus('${transaction.id}')" style="margin-top: 10px; padding: 5px 15px; font-size: 12px;">
+                                                                                                                                                                                                                                                                                                    📝 Update Status
+                                                                                                                                                                                                                                                                                                </button>
+                                                                                                                                                                                                                                                                                            </div>
+                                                                                                                                                                                                                                                                                        `).join('')}
                 </div>
             `;
 
@@ -974,12 +993,12 @@
                     </thead>
                     <tbody>
                         ${Object.entries(serviceStats).map(([service, stats]) => `
-                                                                                                                                                                                                        <tr>
-                                                                                                                                                                                                            <td>${service}</td>
-                                                                                                                                                                                                            <td>${stats.count}</td>
-                                                                                                                                                                                                            <td>Rp ${stats.revenue.toLocaleString()}</td>
-                                                                                                                                                                                                        </tr>
-                                                                                                                                                                                                    `).join('')}
+                                                                                                                                                                                                                                                                                                <tr>
+                                                                                                                                                                                                                                                                                                    <td>${service}</td>
+                                                                                                                                                                                                                                                                                                    <td>${stats.count}</td>
+                                                                                                                                                                                                                                                                                                    <td>Rp ${stats.revenue.toLocaleString()}</td>
+                                                                                                                                                                                                                                                                                                </tr>
+                                                                                                                                                                                                                                                                                            `).join('')}
                     </tbody>
                 </table>
             `;
@@ -1084,10 +1103,10 @@
                     <label>Pilih Status Baru:</label>
                     <select id="newStatus" style="width: 100%; padding: 10px; margin: 10px 0;">
                         ${statusOptions.map(option => `
-                                                                                                                                                                                                        <option value="${option.value}" ${transaction.status === option.value ? 'selected' : ''}>
-                                                                                                                                                                                                            ${option.text}
-                                                                                                                                                                                                        </option>
-                                                                                                                                                                                                    `).join('')}
+                                                                                                                                                                                                                                                                                                <option value="${option.value}" ${transaction.status === option.value ? 'selected' : ''}>
+                                                                                                                                                                                                                                                                                                    ${option.text}
+                                                                                                                                                                                                                                                                                                </option>
+                                                                                                                                                                                                                                                                                            `).join('')}
                     </select>
                 </div>
 
@@ -1121,6 +1140,7 @@
 
         function closeModal() {
             document.getElementById('transactionModal').style.display = 'none';
+            window.location.replace("{{ route('order.index') }}")
         }
 
         function formatNumber(input) {

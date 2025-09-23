@@ -45,32 +45,28 @@
                                             <td class="py-1">{{ $item->order_end_date }}</td>
                                             <td class="py-1">
                                                 @if ($item->order_status == 0)
-                                                    <span class="badge bg-secondary">Pending</span>
+                                                    <span class="badge bg-warning">Pending</span>
                                                 @elseif($item->order_status == 1)
-                                                    <span class="badge bg-info">Selesai</span>
-                                                @elseif($item->order_status == 2)
                                                     <span class="badge bg-success">Pickup</span>
                                                 @endif
                                             </td>
                                             <td class="py-1">
                                                 @if ($item->order_status == 0)
-                                                    <form action="{{ route('order.updateStatus', $item->id) }}"
-                                                        method="post" class="d-inline">
+                                                    <form action="{{ route('order.complete', $item->id) }}" class="d-inline"
+                                                        method="POST">
                                                         @csrf
-                                                        @method('PATCH')
-                                                        <input type="hidden" name="status" value="1">
-                                                        <button type="submit"
-                                                            class="btn btn-info btn-rounded btn-fw btn-sm">
-                                                            Tandai Selesai
+                                                        <button type="submit" class="btn btn-success btn-sm">
+                                                            ✅ Selesaikan Pickup
                                                         </button>
                                                     </form>
-                                                @elseif ($item->order_status == 1)
-                                                    <a href="{{ route('pickup.create', $item->id) }}"
-                                                        class="btn btn-outline-success btn-fw btn-sm">✔ Selesai</a>
-                                                @elseif ($item->order_status == 2)
-                                                    <span class="badge bg-success">Sudah Pickup</span>
                                                 @endif
-
+                                                <form action="{{ route('order.edit', $item->id) }}" method="GET"
+                                                    class="d-inline">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="btn btn-info btn-rounded btn-fw btn-sm">detail
+                                                    </button>
+                                                </form>
                                                 <form action="{{ route('order.destroy', $item->id) }}" method="post"
                                                     class="d-inline" onclick="return confirm('Yakin ingin delete ?')">
                                                     @csrf

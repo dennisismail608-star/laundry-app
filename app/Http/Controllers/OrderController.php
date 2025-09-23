@@ -8,6 +8,8 @@ use App\Models\Customer;
 use Carbon\Carbon;
 use App\Models\TypeOfService;
 use App\Models\TransOrderDetail;
+use App\Models\TransLaundryPickup;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class OrderController extends Controller
 {
@@ -65,10 +67,12 @@ class OrderController extends Controller
         // Validasi
         $request->validate([
             'id_customer' => 'required|exists:customers,id',
-            'order_code'  => 'required|unique:trans_orders,order_code',
             'order_date'  => 'required|date',
             'services'    => 'required|array|min:1',
         ]);
+
+        // generate kode order unik
+        $order_code = $this->createOrderCode();
 
         // Hitung total
         $total = 0;
@@ -83,7 +87,7 @@ class OrderController extends Controller
             // Simpan order
             $order = TransOrder::create([
                 'id_customer'  => $request->id_customer,
-                'order_code'   => $request->order_code,
+                'order_code'   => $order_code,
                 'order_date'   => $request->order_date,
                 'order_status' => 0,
                 'order_pay'    => $request->order_pay,
@@ -91,7 +95,7 @@ class OrderController extends Controller
                 'total'        => $total,
             ]);
 
-            // Simpan order details
+            // Simpan detail
             foreach ($request->services as $service) {
                 TransOrderDetail::create([
                     'id_order'   => $order->id,
@@ -102,13 +106,15 @@ class OrderController extends Controller
                 ]);
             }
 
-            // RETURN JSON agar fetch JS bisa baca
+            // balikin JSON biar JS bisa nampilin struk
             return response()->json([
+                'success' => true,
                 'message' => 'Order berhasil dibuat',
                 'order'   => $order,
-            ], 200);
+            ]);
         } catch (\Exception $e) {
             return response()->json([
+                'success' => false,
                 'message' => 'Terjadi kesalahan server',
                 'error'   => $e->getMessage()
             ], 500);
@@ -130,15 +136,24 @@ class OrderController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $order = TransOrder::findOrFail($id);
+        $customers = Customer::all();
+        $services = TypeOfService::all();
+        return view('content.order.edit', compact('order', 'customers', 'services'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, TransOrder $order)
     {
-        //
+        $order->update([
+            'order_pay'    => $request->order_pay,
+            'order_change' => $request->order_change,
+            'notes'        => $request->notes,
+        ]);
+
+        return redirect()->route('order.index')->with('success', 'Order updated!');
     }
 
     /**
@@ -157,19 +172,32 @@ class OrderController extends Controller
         return redirect()->route('order.index')->with('success', '');
     }
 
-    public function updateStatus(Request $request, $id)
+    public function complete(Request $request, $id)
     {
         $order = TransOrder::findOrFail($id);
-        $status = $request->status;
 
-        if ($status == 1 && is_null($order->order_end_date)) {
-            // set end_date otomatis kalau status selesai
-            $order->order_end_date = now();
+
+        // Set status jadi selesai
+        $order->order_status = 1; // misal: 0 = pending, 1 = pickup, 2 = selesai
+        $order->order_end_date = Carbon::now();
+
+        // kalau ada notes tambahan
+        if ($request->has('notes')) {
+            $order->notes = $request->notes;
         }
 
-        $order->order_status = $status;
         $order->save();
 
-        return back()->with('success', 'Status order berhasil diperbarui');
+        // TransLaundryPickup::create([
+        //     'id_order',
+        //     'id_customer' => $order->id,
+        //     'pickup_date' => Carbon::now(),
+        // ]);
+
+        Alert::success('Berhasil', 'Pickup laundry berhasil diselesaikan');
+        return redirect()->route('order.index');
+
+        Alert::success('Berhasil', 'Pickup laundry berhasil diselesaikan');
+        return redirect()->route('order.index')->with('berhasil');
     }
 }

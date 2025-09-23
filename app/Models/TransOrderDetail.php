@@ -23,4 +23,9 @@ class TransOrderDetail extends Model
     {
         return $this->belongsTo(TypeOfService::class, 'id_service');
     }
+
+    public function pickup()
+    {
+        return $this->belongsTo(TransLaundryPickup::class, 'id_order');
+    }
 }
