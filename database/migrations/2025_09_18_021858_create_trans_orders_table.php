@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('id_customer')->constrained('customers')->onDelete('cascade');
             $table->string('order_code', 50);
-            $table->date('order_date');
-            $table->date('order_end_date');
+            $table->date('order_date')->nullable();
+            $table->date('order_end_date')->nullable();
             $table->tinyInteger('order_status')->default(0); // 0 = pending, 1 = selesai
-            $table->integer('order_pay');
-            $table->integer('order_change');
-            $table->integer('total');
+            $table->integer('order_pay')->nullable();
+            $table->integer('order_change')->nullable();
+            $table->integer('total')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
