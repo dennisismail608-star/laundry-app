@@ -188,14 +188,12 @@ class OrderController extends Controller
 
         $order->save();
 
-        // TransLaundryPickup::create([
-        //     'id_order',
-        //     'id_customer' => $order->id,
-        //     'pickup_date' => Carbon::now(),
-        // ]);
-
-        Alert::success('Berhasil', 'Pickup laundry berhasil diselesaikan');
-        return redirect()->route('order.index');
+        TransLaundryPickup::create([
+            'id_order'    => $order->id, // Ambil id dari objek $order yang sudah ditemukan
+            'id_customer' => $order->id_customer, // Ambil id_customer dari objek $order
+            'pickup_date' => Carbon::now(),
+            'notes'       => $request->notes ?? null // Tambahkan catatan dari request (opsional)
+        ]);
 
         Alert::success('Berhasil', 'Pickup laundry berhasil diselesaikan');
         return redirect()->route('order.index')->with('berhasil');

@@ -5,10 +5,10 @@
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Order</h4>
-                        <p class="card-description">Order</p>
+                        <h4 class="card-title">Report</h4>
+                        <p class="card-description">Report Order</p>
                         <div align="right">
-                            <a href="{{ route('order.create') }}" class="btn btn-primary mt-2 mb-2">Create</a>
+                            <a href="{{ route('report.pdf.all') }}" class="btn btn-danger">Download PDF</a>
                         </div>
                         <div class="table-responsive pt-3">
                             <table class="table table-striped">
@@ -51,29 +51,18 @@
                                                 @endif
                                             </td>
                                             <td class="py-1">
-                                                @if ($item->order_status == 0)
-                                                    <form action="{{ route('order.complete', $item->id) }}" class="d-inline"
-                                                        method="POST">
-                                                        @csrf
-                                                        <button type="submit" class="btn btn-success btn-sm">
-                                                            Selesaikan Pickup
-                                                        </button>
-                                                    </form>
-                                                @endif
-                                                <form action="{{ route('order.edit', $item->id) }}" method="GET"
+                                                <a href="{{ route('report.pdf', $item->id) }}"
+                                                    class="btn btn-danger btn-sm">Download PDF</a>
+
+                                                <a href="{{ route('report.detail', $item->id) }}"
+                                                    class="btn btn-info btn-rounded btn-fw btn-sm">detail</a>
+                                                {{-- <form action="{{ route('report.detail', $item->id) }}" method="GET"
                                                     class="d-inline">
                                                     @csrf
                                                     <button type="submit"
                                                         class="btn btn-info btn-rounded btn-fw btn-sm">detail
                                                     </button>
-                                                </form>
-                                                <form action="{{ route('order.destroy', $item->id) }}" method="post"
-                                                    class="d-inline" onclick="return confirm('Yakin ingin delete ?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-danger btn-rounded btn-fw btn-sm"
-                                                        type="submit">Delete</button>
-                                                </form>
+                                                </form> --}}
                                             </td>
                                         </tr>
                                     @endforeach
