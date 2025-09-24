@@ -10,6 +10,7 @@ use App\Models\TypeOfService;
 use App\Models\TransOrderDetail;
 use App\Models\TransLaundryPickup;
 use RealRashid\SweetAlert\Facades\Alert;
+use RealRashid\SweetAlert\ToSweetAlert;
 
 class OrderController extends Controller
 {
@@ -153,6 +154,7 @@ class OrderController extends Controller
             'notes'        => $request->notes,
         ]);
 
+
         return redirect()->route('order.index')->with('success', 'Order updated!');
     }
 
@@ -197,5 +199,11 @@ class OrderController extends Controller
 
         Alert::success('Berhasil', 'Pickup laundry berhasil diselesaikan');
         return redirect()->route('order.index')->with('berhasil');
+    }
+
+    public function getTransactions()
+    {
+        $transactions = TransOrder::all();
+        return response()->json($transactions);
     }
 }

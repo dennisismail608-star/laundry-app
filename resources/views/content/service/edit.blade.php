@@ -7,7 +7,7 @@
                     <div class="card-body">
                         <h4 class="card-title">Edit Service</h4>
                         <p class="card-description">Isi Form untuk Edit Service</p>
-                        <form action="{{route('customer.update')}}" class="forms-sample" method="POST">
+                        <form action="{{ route('service.update', $service->id) }}" class="forms-sample" method="POST">
                             @csrf
                             @method('PUT')
                             <div class="form-group">

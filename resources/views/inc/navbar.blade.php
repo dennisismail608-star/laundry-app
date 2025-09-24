@@ -24,7 +24,7 @@
         </ul>
         <ul class="navbar-nav navbar-nav-right">
             <li class="nav-item dropdown">
-                <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
+                {{-- <a class="nav-link count-indicator dropdown-toggle" id="notificationDropdown" href="#"
                     data-toggle="dropdown">
                     <i class="icon-bell mx-0"></i>
                     <span class="count"></span>
@@ -71,32 +71,32 @@
                             </p>
                         </div>
                     </a>
-                </div>
+                </div> --}}
             </li>
             <li class="nav-item nav-profile dropdown">
                 <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
-                    <img src="{{ asset('assets/images/faces/face28.jpg') }}" alt="profile" />
+                    {{-- <img src="{{ asset('assets/images/faces/face28.jpg') }}" alt="profile" /> --}}
+                    <i class="icon-menu"></i>
                 </a>
                 <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
-                    <a class="dropdown-item">
-                        <i class="ti-settings text-primary"></i>
-                        Settings
-                    </a>
-                    <a class="dropdown-item">
+                    <a href="{{ route('logout') }}" class="dropdown-item"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="ti-power-off text-primary"></i>
                         Logout
                     </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+                    {{-- <form action="{{ route('logout') }}" method="POST" class="dropdown-item">
+                        @csrf
+                        <button class="ti-power-off text-primary">logout</button>
+                    </form>
+                    <a href="{{ route('logout') }}" class="dropdown-item">
+                        <i class="ti-power-off text-primary"></i>
+                        Logout
+                    </a> --}}
                 </div>
             </li>
-            <li class="nav-item nav-settings d-none d-lg-flex">
-                <a class="nav-link" href="#">
-                    <i class="icon-ellipsis"></i>
-                </a>
-            </li>
         </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-            data-toggle="offcanvas">
-            <span class="icon-menu"></span>
-        </button>
     </div>
 </nav>

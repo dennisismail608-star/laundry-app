@@ -25,7 +25,11 @@
                                 <tbody>
                                     @foreach ($order->details as $item)
                                         <tr>
-                                            <td>{{ $item->id_service }}</td>
+                                            <td>
+                                                @if ($item->service)
+                                                    <span>{{ $item->service->service_name }}</span>
+                                                @endif
+                                            </td>
                                             <td>{{ $item->qty }}</td>
                                             <td>{{ number_format($item->subtotal, 0, ',', '.') }}</td>
                                         </tr>
@@ -58,13 +62,13 @@
                                     <input type="date" name="order_date" class="form-control"
                                         value="{{ $order->order_date }}" readonly>
                                 </div>
+                                <!-- Catatan -->
+                                <div class="col-sm-12 mb-3">
+                                    <label>Catatan</label>
+                                    <textarea name="notes" cols="100" rows="5" class="form-control"></textarea>
+                                </div>
                             </div>
 
-                            <!-- Catatan -->
-                            <div class="mb-3">
-                                <label>Catatan</label>
-                                <textarea name="notes" cols="30" rows="3" class="form-control"></textarea>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -85,7 +89,8 @@
 
                             <div class="mt-3">
                                 <label>Kembalian</label>
-                                <input type="number" id="order_change" name="order_change" class="form-control" readonly>
+                                <input type="number" id="order_change" name="order_change" class="form-control"
+                                    value="{{ $order->order_change }}" readonly>
                             </div>
 
                             <button type="submit" class="btn btn-primary mt-3">Simpan</button>

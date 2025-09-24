@@ -31,7 +31,7 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         $services = TypeOfService::create($request->all());
-        return redirect()->route("service.index", compact('services'))->with("success", "Tambah Berhasil!!");
+        return redirect()->route("service.index", $services->id)->with("success", "Tambah Berhasil!!");
     }
 
     /**

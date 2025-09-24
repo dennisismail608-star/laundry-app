@@ -19,7 +19,11 @@
                             <tbody>
                                 @forelse($order->details ?? [] as $item)
                                     <tr>
-                                        <td>{{ $item->id_service }}</td>
+                                        <td>
+                                            @if ($item->service)
+                                                <span>{{ $item->service->service_name }}</span>
+                                            @endif
+                                        </td>
                                         <td>{{ $item->qty }}</td>
                                         <td>{{ number_format($item->subtotal, 0, ',', '.') }}</td>
                                     </tr>
@@ -52,9 +56,14 @@
                         </div>
 
                         <div class="mb-3">
+                            <label>Tanggal Order</label>
+                            <input type="date" class="form-control" value="{{ $order->order_end_date }}" readonly>
+                        </div>
+
+                        {{-- <div class="mb-3">
                             <label>Catatan</label>
                             <input class="form-control" type="text" value={{ $order->notes }} readonly>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div>

@@ -56,7 +56,7 @@
                                                         method="POST">
                                                         @csrf
                                                         <button type="submit" class="btn btn-success btn-sm">
-                                                            Selesaikan Pickup
+                                                            Pickup
                                                         </button>
                                                     </form>
                                                 @endif

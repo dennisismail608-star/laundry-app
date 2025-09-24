@@ -15,7 +15,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #646f94 0%, #66408d 100%);
             min-height: 100vh;
             color: #333;
         }
@@ -51,7 +51,7 @@
 
         .main-content {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 20px;
             margin-bottom: 20px;
         }
@@ -404,7 +404,7 @@
         </div>
 
         <!-- Statistics -->
-        <div class="stats-grid">
+        {{-- <div class="stats-grid">
             <div class="stat-card">
                 <h3 id="totalTransactions">0</h3>
                 <p>Total Transaksi</p>
@@ -421,116 +421,120 @@
                 <h3 id="completedOrders">0</h3>
                 <p>Pesanan Selesai</p>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Main Content -->
         <div class="main-content">
             <!-- Left Panel: New Transaction -->
-            <div class="card">
-                <h2>🛒 Transaksi Baru</h2>
+            <div class="col-12">
+                <div class="card">
+                    <h2>🛒 Transaksi Baru</h2>
 
-                <form id="transactionForm">
+                    <form id="transactionForm">
 
-                    <div class="form-group">
-                        <label for="customerName">Nama Pelanggan</label>
-                        <select id="customerName" name="id_customer" class="form-control" required>
-                            <option value="">-- pilih customer --</option>
-                            @foreach ($customers as $c)
-                                <option value="{{ $c->id }}" data-phone="{{ $c->phone }}"
-                                    data-address="{{ $c->address }}">
-                                    {{ $c->customer_name }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="customerPhone">No. Telepon</label>
-                            <input type="tel" id="customerPhone" name="phone" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="customerAddress">Alamat</label>
-                            <input type="text" id="customerAddress" name="address" readonly>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Pilih Layanan</label>
-                        <div class="services-grid">
-                            @foreach ($services as $item)
-                                <button type="button" class="service-card"
-                                    onclick="addService('{{ $item->service_name }}', {{ $item->price }}, {{ $item->id }})">
-                                    <h3>{{ $item->service_name }}</h3>
-                                    <div class="price">Rp {{ number_format($item->price, 0, ',', '.') }}</div>
-                                </button>
-                            @endforeach
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="serviceWeight">Berat/Jumlah</label>
-                            <input type="number" id="serviceWeight" step="0.1" min="0.1" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="serviceType">Jenis Layanan</label>
-                            <select id="serviceType" class="form-control" required onchange="updatePrice()">
-                                <option value="">-- Pilih Layanan --</option>
-                                @foreach ($services as $item)
-                                    <option value="{{ $item->id }}" data-name="{{ $item->service_name }}"
-                                        data-price="{{ $item->price }}">
-                                        {{ $item->service_name }} - Rp {{ number_format($item->price, 0, ',', '.') }}
+                            <label for="customerName">Nama Pelanggan</label>
+                            <select id="customerName" name="id_customer" class="form-control" required>
+                                <option value="">-- pilih customer --</option>
+                                @foreach ($customers as $c)
+                                    <option value="{{ $c->id }}" data-phone="{{ $c->phone }}"
+                                        data-address="{{ $c->address }}">
+                                        {{ $c->customer_name }}
                                     </option>
                                 @endforeach
                             </select>
                         </div>
-                    </div>
 
-                    <div class="form-group">
-                        <label for="notes">Catatan</label>
-                        <textarea id="notes" rows="3" placeholder="Catatan khusus untuk pesanan..."></textarea>
-                    </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="customerPhone">No. Telepon</label>
+                                <input type="tel" id="customerPhone" name="phone" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="customerAddress">Alamat</label>
+                                <input type="text" id="customerAddress" name="address" readonly>
+                            </div>
+                        </div>
 
-                    <button type="button" class="btn btn-primary" onclick="addToCart()"
-                        style="width: 100%; margin-bottom: 10px;">
-                        ➕ Tambah ke Keranjang
-                    </button>
-                </form>
+                        <div class="form-group">
+                            <label>Pilih Layanan</label>
+                            <div class="services-grid">
+                                @foreach ($services as $item)
+                                    <button type="button" class="service-card"
+                                        onclick="addService('{{ $item->service_name }}', {{ $item->price }}, {{ $item->id }})">
+                                        <h3>{{ $item->service_name }}</h3>
+                                        <div class="price">Rp {{ number_format($item->price, 0, ',', '.') }}</div>
+                                    </button>
+                                @endforeach
+                            </div>
+                        </div>
 
-                <!-- Cart -->
-                <div id="cartSection" style="display: none;">
-                    <h3>📋 Keranjang Belanja</h3>
-                    <table class="cart-table">
-                        <thead>
-                            <tr>
-                                <th>Layanan</th>
-                                <th>Qty</th>
-                                <th>Harga</th>
-                                <th>Subtotal</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody id="cartItems">
-                        </tbody>
-                    </table>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="serviceWeight">Berat/Jumlah</label>
+                                <input type="number" id="serviceWeight" step="0.1" min="0.1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="serviceType">Jenis Layanan</label>
+                                <select id="serviceType" class="form-control" required onchange="updatePrice()">
+                                    <option value="">-- Pilih Layanan --</option>
+                                    @foreach ($services as $item)
+                                        <option value="{{ $item->id }}" data-name="{{ $item->service_name }}"
+                                            data-price="{{ $item->price }}">
+                                            {{ $item->service_name }} - Rp
+                                            {{ number_format($item->price, 0, ',', '.') }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
-                    <div class="total-section">
-                        <h3>Total Pembayaran</h3>
-                        <div class="total-amount" id="totalAmount">Rp 0</div>
-                        <button class="btn btn-success" type="submit" onclick="processTransaction()"
-                            style="width: 100%; margin-top: 15px;">
-                            💳 Proses Transaksi
+                        <div class="form-group">
+                            <label for="notes">Catatan</label>
+                            <textarea id="notes" rows="3" placeholder="Catatan khusus untuk pesanan..."></textarea>
+                        </div>
+
+                        <button type="button" class="btn btn-primary" onclick="addToCart()"
+                            style="width: 100%; margin-bottom: 10px;">
+                            ➕ Tambah ke Keranjang
                         </button>
+                    </form>
+
+                    <!-- Cart -->
+                    <div id="cartSection" style="display: none;">
+                        <h3>📋 Keranjang Belanja</h3>
+                        <table class="cart-table">
+                            <thead>
+                                <tr>
+                                    <th>Layanan</th>
+                                    <th>Qty</th>
+                                    <th>Harga</th>
+                                    <th>Subtotal</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="cartItems">
+                            </tbody>
+                        </table>
+
+                        <div class="total-section">
+                            <h3>Total Pembayaran</h3>
+                            <div class="total-amount" id="totalAmount">Rp 0</div>
+                            <button class="btn btn-success" type="submit" onclick="processTransaction()"
+                                style="width: 100%; margin-top: 15px;">
+                                💳 Proses Transaksi
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
+
             <!-- Right Panel: Transaction History -->
-            <div class="card">
+            {{-- <div class="card">
                 <h2>📊 Riwayat Transaksi</h2>
-                <div class="transaction-list" id="transactionHistory">
-                    {{-- <div class="transaction-item">
+                <div class="transaction-list" id="transactionHistory"> --}}
+            {{-- <div class="transaction-item">
                         <h4></h4>
                         <p></p>
                         <p></p>
@@ -546,25 +550,24 @@
                         <p></p>
                         <span class="status-badge status-ready"></span>
                     </div> --}}
-                </div>
+            {{-- </div>
 
                 <button class="btn btn-warning" onclick="showAllTransactions()" style="width: 100%; margin-top: 15px;">
                     📋 Lihat Semua Transaksi
                 </button>
-            </div>
+            </div> --}}
         </div>
 
         <!-- Action Buttons -->
-        <div style="text-align: center; margin-top: 20px;">
-            <button class="btn btn-primary" onclick="showReports()" style="margin: 0 10px;">
-                📈 Laporan Penjualan
-            </button>
-            <button class="btn btn-warning" onclick="manageServices()" style="margin: 0 10px;">
-                ⚙️ Kelola Layanan
-            </button>
-            <button class="btn btn-danger" onclick="clearCart()" style="margin: 0 10px;">
+        <div style="margin-top: 20px;">
+            <form action="{{ route('order.index') }}" class="d-inline">
+                <button class="btn btn-warning" style="margin: 0 10px;">
+                    Kembali
+                </button>
+            </form>
+            {{-- <button class="btn btn-danger" onclick="clearCart()" style="margin: 0 10px;">
                 🗑️ Bersihkan Keranjang
-            </button>
+            </button> --}}
         </div>
     </div>
 
@@ -578,7 +581,7 @@
 
     <script>
         let cart = [];
-        let transactions = JSON.parse(localStorage.getItem('laundryTransactions')) || [];
+        let transactions = [];
         let transactionCounter = transactions.length + 1;
 
 
@@ -741,7 +744,8 @@
 
 
             // Simpan sementara di array lokal
-            transactions.push(transaction);
+            // transactions.push(transaction);
+
 
             const tokenMeta = document.querySelector('meta[name="csrf-token"]');
             const token = tokenMeta ? tokenMeta.content : '';
@@ -757,14 +761,16 @@
                     body: JSON.stringify(transaction) // gunakan transaction bukan data
                 });
 
-                const result = await res.json();
-                console.log(result);
-
                 if (res.ok) {
                     alert('Success');
                 } else {
                     alert('Ups reservasi gagal');
                 }
+
+                const result = await res.json();
+
+                getData();
+
             } catch (error) {
                 console.log("error", error);
                 alert('Ups reservasi gagal');
@@ -801,8 +807,8 @@
                     <div style="margin-bottom: 20px;">
                         <strong>Detail Pesanan:</strong><br>
                         ${transaction.items.map(item =>`<div class="receipt-item">
-                                                                                            <span>${item.service} (${item.weight} ${item.service.includes('Sepatu') ? 'pasang' : item.service.includes('Karpet') ? 'm²' : 'kg'})</span>
-                                                                                            <span>Rp ${item.subtotal.toLocaleString()}</span></div>`).join('')}
+                                                                                                                                                                                                                                                                                <span>${item.service} (${item.weight} ${item.service.includes('Sepatu') ? 'pasang' : item.service.includes('Karpet') ? 'm²' : 'kg'})</span>
+                                                                                                                                                                                                                                                                                <span>Rp ${item.subtotal.toLocaleString()}</span></div>`).join('')}
                     </div>
 
                     <div class="receipt-total">
@@ -917,18 +923,18 @@
                 <h2>📋 Semua Transaksi</h2>
                 <div style="max-height: 400px; overflow-y: auto;">
                     ${transactions.map(transaction => `
-                 <div class="transaction-item">
-                     <h4>${transaction.id} - ${transaction.customer.name}</h4>
-                     <p>📞 ${transaction.customer.phone}</p>
-                     <p>🛍️ ${transaction.items.map(item => `${item.service} - ${item.weight}${item.service.includes('Sepatu') ? 'pasang' : item.service.includes('Karpet') ? 'm²' : 'kg'}`).join(', ')}</p>
-                     <p>💰 Rp ${transaction.total.toLocaleString()}</p>
-                     <p>📅 ${new Date(transaction.date).toLocaleString('id-ID')}</p>
-                      <span class="status-badge status-${transaction.status}">${getStatusText(transaction.status)}</span>
-                      <button class="btn btn-primary" onclick="updateTransactionStatus('${transaction.id}')" style="margin-top: 10px; padding: 5px 15px; font-size: 12px;">
-                         📝 Update Status
-                     </button>
-                 </div>
-             `).join('')}
+                                                                                                                                                                                                     <div class="transaction-item">
+                                                                                                                                                                                                         <h4>${transaction.id} - ${transaction.customer.name}</h4>
+                                                                                                                                                                                                         <p>📞 ${transaction.customer.phone}</p>
+                                                                                                                                                                                                         <p>🛍️ ${transaction.items.map(item => `${item.service} - ${item.weight}${item.service.includes('Sepatu') ? 'pasang' : item.service.includes('Karpet') ? 'm²' : 'kg'}`).join(', ')}</p>
+                                                                                                                                                                                                         <p>💰 Rp ${transaction.total.toLocaleString()}</p>
+                                                                                                                                                                                                         <p>📅 ${new Date(transaction.date).toLocaleString('id-ID')}</p>
+                                                                                                                                                                                                          <span class="status-badge status-${transaction.status}">${getStatusText(transaction.status)}</span>
+                                                                                                                                                                                                          <button class="btn btn-primary" onclick="updateTransactionStatus('${transaction.id}')" style="margin-top: 10px; padding: 5px 15px; font-size: 12px;">
+                                                                                                                                                                                                             📝 Update Status
+                                                                                                                                                                                                         </button>
+                                                                                                                                                                                                     </div>
+                                                                                                                                                                                                 `).join('')}
                 </div>
             `;
 
@@ -991,12 +997,12 @@
                     </thead>
                     <tbody>
                         ${Object.entries(serviceStats).map(([service, stats]) => `
-                                                                                                                                                                                                                                                                                                                    <tr>
-                                                                                                                                                                                                                                                                                                                        <td>${service}</td>
-                                                                                                                                                                                                                                                                                                                        <td>${stats.count}</td>
-                                                                                                                                                                                                                                                                                                                        <td>Rp ${stats.revenue.toLocaleString()}</td>
-                                                                                                                                                                                                                                                                                                                    </tr>
-                                                                                                                                                                                                                                                                                                                `).join('')}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <tr>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <td>${service}</td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <td>${stats.count}</td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <td>Rp ${stats.revenue.toLocaleString()}</td>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </tr>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    `).join('')}
                     </tbody>
                 </table>
             `;
@@ -1101,10 +1107,10 @@
                     <label>Pilih Status Baru:</label>
                     <select id="newStatus" style="width: 100%; padding: 10px; margin: 10px 0;">
                         ${statusOptions.map(option => `
-                                                                                                                                                                                                                                                                                                                    <option value="${option.value}" ${transaction.status === option.value ? 'selected' : ''}>
-                                                                                                                                                                                                                                                                                                                        ${option.text}
-                                                                                                                                                                                                                                                                                                                    </option>
-                                                                                                                                                                                                                                                                                                                `).join('')}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <option value="${option.value}" ${transaction.status === option.value ? 'selected' : ''}>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ${option.text}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </option>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    `).join('')}
                     </select>
                 </div>
 
@@ -1157,6 +1163,34 @@
         function parseDecimal(value) {
             // Handle both comma and dot as decimal separator
             return parseFloat(value.toString().replace(',', '.')) || 0;
+        }
+
+        async function getData() {
+            try {
+                const res = await fetch(`\order`, {
+                    method: 'GET',
+                    headers: {
+                        "content-type": "aplication-json"
+                    }
+                })
+
+                if (!res.ok) {
+                    console.log("ERROR")
+                    return;
+                }
+
+                const result = await res.json();
+
+                transactions = result;
+                transactionCounter = transactions.length + 1
+
+                updateTransactionHistory()
+                updateStats()
+
+
+            } catch (error) {
+                console.error("fetch gagal".error)
+            }
         }
     </script>
 

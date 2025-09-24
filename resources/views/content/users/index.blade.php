@@ -11,7 +11,7 @@
                             <a href="{{ route('users.create') }}" class="btn btn-primary mt-2 mb-2">Create</a>
                         </div>
                         <div class="table-responsive pt-3">
-                            <table id="example" class="display expandable-table" style="width:100%">
+                            <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -29,7 +29,7 @@
                                             <td>{{ $item->email }}</td>
                                             <td>
                                                 @if ($item->level)
-                                                    <span class="btn btn-primary btn-rounded btn-fw">
+                                                    <span class="btn btn-primary btn-rounded btn-fw btn-sm">
                                                         {{ $item->level->level_name }}
                                                     </span>
                                                 @endif
@@ -42,7 +42,7 @@
                                                     class="d-inline" onclick="return confirm('Yakin ingin delete ?')">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="btn btn-danger btn-rounded btn-fw"
+                                                    <button class="btn btn-danger btn-rounded btn-fw btn-md"
                                                         type="submit">Delete</button>
                                                 </form>
                                             </td>

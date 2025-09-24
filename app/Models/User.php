@@ -28,4 +28,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    public function checkLevel($level)
+    {
+        return $this->id_level == $level;
+    }
 }

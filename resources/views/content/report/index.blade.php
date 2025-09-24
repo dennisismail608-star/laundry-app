@@ -8,17 +8,23 @@
                         <h4 class="card-title">Report</h4>
                         <p class="card-description">Report Order</p>
                         <div align="right">
-                            <a href="{{ route('report.pdf.all') }}" class="btn btn-danger">Download PDF</a>
+                            <form action="{{ route('report.pdf.all') }}">
+                                <button type="submit" class="btn btn-info btn-icon-text btn-sm">
+                                    <i class="ti-printer btn-icon-append"></i>
+                                    print
+                                </button>
+                            </form>
+                            {{-- <a href="{{ route('report.pdf.all') }}" class="btn btn-danger">Download PDF</a> --}}
                         </div>
                         <div class="table-responsive pt-3">
-                            <table class="table table-striped">
+                            <table class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th>No</th>
                                         <th>Order Code</th>
                                         <th>Customer Name</th>
                                         <th>date</th>
-                                        <th>end date</th>
+                                        <th>Total</th>
                                         <th>status</th>
                                         <th>Action</th>
                                     </tr>
@@ -42,7 +48,7 @@
                                                 @endif
                                             </td>
                                             <td class="py-1">{{ $item->order_date }}</td>
-                                            <td class="py-1">{{ $item->order_end_date }}</td>
+                                            <td class="py-1">{{ $item->total }}</td>
                                             <td class="py-1">
                                                 @if ($item->order_status == 0)
                                                     <span class="badge bg-warning">Pending</span>
@@ -51,18 +57,12 @@
                                                 @endif
                                             </td>
                                             <td class="py-1">
-                                                <a href="{{ route('report.pdf', $item->id) }}"
-                                                    class="btn btn-danger btn-sm">Download PDF</a>
+                                                <form action="{{ route('report.pdf', $item->id) }}" class="d-inline">
+                                                    <button class="btn btn-danger btn-rounded btn-fw btn-sm">print</button>
+                                                </form>
 
                                                 <a href="{{ route('report.detail', $item->id) }}"
                                                     class="btn btn-info btn-rounded btn-fw btn-sm">detail</a>
-                                                {{-- <form action="{{ route('report.detail', $item->id) }}" method="GET"
-                                                    class="d-inline">
-                                                    @csrf
-                                                    <button type="submit"
-                                                        class="btn btn-info btn-rounded btn-fw btn-sm">detail
-                                                    </button>
-                                                </form> --}}
                                             </td>
                                         </tr>
                                     @endforeach
